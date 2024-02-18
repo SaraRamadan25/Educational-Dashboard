@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('semesters', function (Blueprint $table) {
             $table->id();
-            $table->string('semester_name');
+            $table->string('name');
             $table->foreignId('year_id')
-                ->constrained('years');
-            $table->foreignId('statistic_id')
-                ->constrained('statistics');
+                ->constrained('years')
+                 ->onDelete('cascade');
+
+            $table->index(['year_id']);
+
+            $table->timestamps();
+
         });
     }
 

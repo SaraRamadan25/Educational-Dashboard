@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('semester_id')
-                ->constrained('semesters');
-            $table->foreignId('year_id')
-                ->constrained('years');
-            $table->foreignId('statistic_id')
-                ->constrained('statistics');
-            $table->boolean('have_exam');
+                ->constrained('semesters')
+                ->onDelete('cascade');
+
+
+            $table->timestamps();
+
         });
     }
 

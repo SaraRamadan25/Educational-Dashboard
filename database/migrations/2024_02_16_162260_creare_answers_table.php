@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('years', function (Blueprint $table) {
+        Schema::create('answers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('answer');
+            $table->boolean('is_correct');
+            $table->foreignId('question_id')
+                ->constrained('questions')
+                ->onDelete('cascade');
 
             $table->timestamps();
 
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('year');
+        Schema::dropIfExists('answers');
     }
 };

@@ -13,10 +13,16 @@ return new class extends Migration
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
-            $table->string('exam_name');
-            $table->dateTime('exam_date');
+            $table->string('name');
+            $table->dateTime('date');
             $table->foreignId('subject_id')
-                ->constrained('subjects');
+                ->constrained('subjects')
+                ->onDelete('cascade');
+
+            $table->index(['subject_id']);
+
+            $table->timestamps();
+
         });
     }
 

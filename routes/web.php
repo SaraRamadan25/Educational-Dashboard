@@ -1,5 +1,12 @@
 <?php
 
+use App\Http\Controllers\ExamController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\SemesterController;
+use App\Http\Controllers\StatisicController;
+use App\Http\Controllers\StatisticController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\YearController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +22,22 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
+
+Route::get('years', [YearController::class,'index'])->name('years.index');
+Route::get('semesters', [SemesterController::class,'index'])->name('semesters.index');
+Route::get('subjects', [SubjectController::class,'index'])->name('subjects.index');
+Route::get('exams', [ExamController::class,'index'])->name('exams.index');
+Route::get('questions', [QuestionController::class,'index'])->name('questions.index');
+
+/*Route::get('questions/{exam:exam_name}', [QuestionController::class,'index'])->name('questions.index');*/
+/*Route::get('questions/create/{subject:name}/{exam:exam_name}', [QuestionController::class,'create'])->name('questions.create');*/
+Route::get('/questions/create/{subject:name}', [QuestionController::class,'create'])->name('questions.create');
+Route::post('/questions', [QuestionController::class,'store'])->name('questions.store');
+Route::get('statistics', [StatisticController::class,'index'])->name('statistics.index');
+
+/*Route::get('/exams/{exam}/questions/create', [QuestionController::class,'create'])->name('exam.questions.create');*/
+
+
+
+
