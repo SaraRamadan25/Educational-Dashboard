@@ -2,36 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreQuestionRequest;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Subject;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 class QuestionController extends Controller
 {
-    public function index(): View|Application|Factory
+    public function index(): View
     {
         $questions = Question::with('subject')->paginate(10);
         return view('question.index', compact('questions'));
     }
 
-    public function create(Subject $subject)
+    public function create(Request $request,Subject $subject): View
     {
         $subjects = Subject::all();
-        return view('question.create', compact('subject', 'subjects'));
+        $numAnswers = $request->input('num_answers');
+
+        return view('question.create', compact('subject', 'subjects','numAnswers'));
     }
 
-    public function store(Request $request)
+    public function store(StoreQuestionRequest $request): RedirectResponse
     {
-        $validatedData = $request->validate([
-            'subject_id' => 'required|exists:subjects,id',
-            'question' => 'required|string|max:255',
-            'answers' => 'required|array|size:4',
-            'is_correct' => 'required|numeric|min:0|max:3',
-        ]);
+        $validatedData = $request->validated();
 
         $question = Question::create([
             'subject_id' => $validatedData['subject_id'],
@@ -48,7 +47,6 @@ class QuestionController extends Controller
 
         return redirect()->route('questions.index')->with('success', 'Question added successfully.');
     }
-
 
 }
 

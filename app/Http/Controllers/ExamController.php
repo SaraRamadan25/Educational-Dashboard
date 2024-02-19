@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 class ExamController extends Controller
 {
-    public function index(): View|Application|Factory
+    public function index(): View
     {
         $exams= Exam::paginate(10);
         return view('exam.index',compact('exams'));

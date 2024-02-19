@@ -18,7 +18,9 @@ return new class extends Migration
                 ->constrained('semesters')
                 ->onDelete('cascade');
 
+            $table->index(['semester_id']);
 
+            $table->softDeletes();
             $table->timestamps();
 
         });

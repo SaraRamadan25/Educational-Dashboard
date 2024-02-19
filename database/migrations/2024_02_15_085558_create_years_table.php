@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('years', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->softDeletes();
 
             $table->timestamps();
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('year');
+        Schema::dropIfExists('years');
     }
 };

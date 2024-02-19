@@ -11,7 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 class StatisticController extends Controller
 {
-    public function index(): View|Application|Factory
+    public function index(): View
     {
         $yearCount = Year::count();
         $semesterCount = Semester::count();
@@ -20,12 +20,11 @@ class StatisticController extends Controller
         $years_with_exams = Year::whereHas('semesters.subjects.exams')->get();
 
         $years_with_subjects = Year::select('years.id', 'years.name')
-            ->join('semesters', 'semesters.year_id', '=', 'years.id')
-            ->join('subjects', 'subjects.semester_id', '=', 'semesters.id')
+            ->leftJoin('semesters', 'semesters.year_id', '=', 'years.id')
+            ->leftJoin('subjects', 'subjects.semester_id', '=', 'semesters.id')
             ->groupBy('years.id', 'years.name')
             ->selectRaw('count(subjects.id) as subjects_count')
             ->get();
-
 
         return view('statistic.index', compact('yearCount', 'semesterCount','semesters_in_year','subjects','years_with_subjects', 'years_with_exams'));
     }

@@ -21,12 +21,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('master');
 })->name('home');
 
-Route::get('years', [YearController::class,'index'])->name('years.index');
-Route::get('semesters', [SemesterController::class,'index'])->name('semesters.index');
-Route::get('subjects', [SubjectController::class,'index'])->name('subjects.index');
+Route::get('years/trashed', [YearController::class, 'trashed'])->name('years.trashed');
+Route::post('years/{year}/restore', [YearController::class, 'restore'])->name('years.restore');
+Route::resource('years', YearController::class);
+
+Route::get('semesters/trashed', [SemesterController::class, 'trashed'])->name('semesters.trashed');
+Route::post('semesters/{semester}/restore', [SemesterController::class, 'restore'])->name('semesters.restore');
+Route::resource('semesters', SemesterController::class);
+
+Route::get('subjects/trashed', [SubjectController::class, 'trashed'])->name('semesters.trashed');
+Route::post('subjects/{subject}/restore', [SubjectController::class, 'restore'])->name('semesters.restore');
+Route::resource('subjects', SubjectController::class);
+
 Route::get('exams', [ExamController::class,'index'])->name('exams.index');
 Route::get('questions', [QuestionController::class,'index'])->name('questions.index');
 

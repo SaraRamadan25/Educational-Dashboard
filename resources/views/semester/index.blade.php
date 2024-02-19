@@ -2,26 +2,13 @@
 @section('title', 'Academic Semesters')
 
 @section('content')
-    <div class="breadcrumbs">
-        <div class="breadcrumbs-inner">
-            <div class="row m-0">
-                <div class="col-sm-4">
-                    <div class="page-header float-left">
-                        <!-- Add any content if needed -->
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="page-header float-right">
-                        <div class="page-title">
-                            <ol class="breadcrumb text-right">
-                                <!-- Add any content if needed -->
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
-    </div>
+    @endif
+
+    <!-- ... -->
 
     <div class="col-lg-12">
         <div class="card">
@@ -34,6 +21,7 @@
                     <tr>
                         <th scope="col">Semester Name</th>
                         <th scope="col">Semester's Year</th>
+                        <th scope="col">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -41,10 +29,20 @@
                         <tr>
                             <td>{{ $semester->name }}</td>
                             <td>{{ $semester->year->name }}</td>
+                            <td>
+                                <a href="{{ route('semesters.edit', $semester) }}" class="btn btn-primary">Edit</a>
+
+                                <form action="{{ route('semesters.destroy', $semester) }}" method="POST" style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
+                <a href="{{ route('semesters.trashed') }}" class="btn btn-secondary">View Trashed Semesters</a>
             </div>
         </div>
     </div>

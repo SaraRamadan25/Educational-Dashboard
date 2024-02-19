@@ -2,6 +2,13 @@
 @section('title', 'Academic Years')
 
 @section('content')
+
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="breadcrumbs">
         <div class="breadcrumbs-inner">
             <div class="row m-0">
@@ -38,8 +45,19 @@
                     @foreach($years as $year)
                         <tr>
                             <td>{{ $year->name }}</td>
+                            <td>
+                                <a href="{{ route('years.edit', $year) }}" class="btn btn-primary">Edit</a>
+
+                                <form action="{{ route('years.destroy', $year) }}" method="POST" style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
+                    <tr>
+                        <a href="{{ route('years.trashed') }}" class="btn btn-secondary">View Trashed Years</a>                    </tr>
                     </tbody>
                 </table>
             </div>

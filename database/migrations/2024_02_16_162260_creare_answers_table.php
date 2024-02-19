@@ -19,6 +19,8 @@ return new class extends Migration
                 ->constrained('questions')
                 ->onDelete('cascade');
 
+            $table->index(['question_id']);
+
             $table->timestamps();
 
         });
