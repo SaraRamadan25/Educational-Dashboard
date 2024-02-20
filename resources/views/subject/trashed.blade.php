@@ -14,7 +14,7 @@
             <tr>
                 <td>{{ $subject->name }}</td>
                 <td>
-                    <form action="{{ route('subject.restore', $subject) }}" method="POST">
+                    <form action="{{ route('subjects.restore', $subject) }}" method="POST">
                         @csrf
                         <button type="submit" class="btn btn-success">Restore</button>
                     </form>

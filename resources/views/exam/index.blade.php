@@ -13,7 +13,6 @@
                     <div class="page-header float-right">
                         <div class="page-title">
                             <ol class="breadcrumb text-right">
-                                <li><a href="#">All Exams</a></li>
                             </ol>
                         </div>
                     </div>
@@ -46,8 +45,7 @@
                             <td>{{$exam->date}}</td>
                             <td>{{$exam->subject->name}}</td>
                             <td>
-                                <a href="" class="btn btn-primary">Add Question</a>
-                            </td>
+                                <a href="{{ route('exam.questions.create', ['exam' => $exam->id]) }}" class="btn btn-primary">Add Question</a>                            </td>
                         </tr>
                     @endforeach
                     </tbody>

@@ -30,7 +30,7 @@
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <!-- Modules Go Here -->
+
         <p><a href="{{ route('years.index') }}">Years Module</a></p>
         <p><a href="{{ route('semesters.index') }}">Semesters Module</a></p>
         <p><a href="{{ route('subjects.index') }}">Subjects Module</a></p>

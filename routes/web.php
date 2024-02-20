@@ -3,7 +3,6 @@
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\SemesterController;
-use App\Http\Controllers\StatisicController;
 use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\YearController;
@@ -32,18 +31,25 @@ Route::get('semesters/trashed', [SemesterController::class, 'trashed'])->name('s
 Route::post('semesters/{semester}/restore', [SemesterController::class, 'restore'])->name('semesters.restore');
 Route::resource('semesters', SemesterController::class);
 
-Route::get('subjects/trashed', [SubjectController::class, 'trashed'])->name('semesters.trashed');
-Route::post('subjects/{subject}/restore', [SubjectController::class, 'restore'])->name('semesters.restore');
+Route::get('subjects/trashed', [SubjectController::class, 'trashed'])->name('subjects.trashed');
+Route::post('subjects/{subject}/restore', [SubjectController::class, 'restore'])->name('subjects.restore');
 Route::resource('subjects', SubjectController::class);
 
-Route::get('exams', [ExamController::class,'index'])->name('exams.index');
-Route::get('questions', [QuestionController::class,'index'])->name('questions.index');
+Route::get('questions/trashed', [QuestionController::class, 'trashed'])->name('questions.trashed');
+Route::post('questions/{question}/restore', [QuestionController::class, 'restore'])->name('questions.restore');
+Route::resource('questions', QuestionController::class);
+
+Route::post('/exams/{exam}/questions', [QuestionController::class, 'store'])->name('questions.store');
+Route::get('/exams/{exam}/questions/create', [QuestionController::class,'create'])->name('exam.questions.create');
+Route::get('exams/trashed', [ExamController::class, 'trashed'])->name('exams.trashed');
+Route::post('exams/{exam}/restore', [ExamController::class, 'restore'])->name('exams.restore');
+Route::resource('exams', ExamController::class);
+Route::get('statistics', [StatisticController::class,'index'])->name('statistics.index');
 
 /*Route::get('questions/{exam:exam_name}', [QuestionController::class,'index'])->name('questions.index');*/
 /*Route::get('questions/create/{subject:name}/{exam:exam_name}', [QuestionController::class,'create'])->name('questions.create');*/
-Route::get('/questions/create/{subject:name}', [QuestionController::class,'create'])->name('questions.create');
-Route::post('/questions', [QuestionController::class,'store'])->name('questions.store');
-Route::get('statistics', [StatisticController::class,'index'])->name('statistics.index');
+/*Route::get('/questions/create/{subject:name}', [QuestionController::class,'create'])->name('questions.create');
+Route::post('/questions', [QuestionController::class,'store'])->name('questions.store');*/
 
 /*Route::get('/exams/{exam}/questions/create', [QuestionController::class,'create'])->name('exam.questions.create');*/
 

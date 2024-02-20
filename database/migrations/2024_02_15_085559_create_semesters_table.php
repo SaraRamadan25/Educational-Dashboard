@@ -18,6 +18,8 @@ return new class extends Migration
                 ->constrained('years')
                  ->onDelete('cascade');
 
+            $table->softDeletes();
+
             $table->index(['year_id']);
 
             $table->timestamps();

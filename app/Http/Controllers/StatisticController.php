@@ -11,6 +11,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 class StatisticController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return View
+     */
     public function index(): View
     {
         $yearCount = Year::count();

@@ -9,7 +9,7 @@
             </div>
             <div class="card-body">
                 @if (!isset($numAnswers))
-                    <form action="{{ route('questions.create', ['subject' => $subject->name]) }}" method="GET">
+                    <form action="{{ route('questions.create', ['subject' => $subject->name, 'exam' => $exam->id]) }}" method="GET">
                         <div class="form-group">
                             <label for="num_answers">Number of Answers:</label>
                             <input type="number" name="num_answers" id="num_answers" class="form-control" min="1">
@@ -17,7 +17,7 @@
                         <button type="submit" class="btn btn-primary">Next</button>
                     </form>
                 @else
-                    <form action="{{ route('questions.store') }}" method="POST">
+                    <form action="{{ route('questions.store', ['exam' => $exam->id]) }}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="question">Question:</label>

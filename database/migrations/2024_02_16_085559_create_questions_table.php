@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('subject_id')
                 ->constrained('subjects');
 
+            $table->softDeletes();
+
             $table->index(['subject_id']);
 
             $table->timestamps();

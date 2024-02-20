@@ -19,6 +19,8 @@ return new class extends Migration
                 ->constrained('subjects')
                 ->onDelete('cascade');
 
+            $table->softDeletes();
+
             $table->index(['subject_id']);
 
             $table->timestamps();
