@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreExamRequest;
-use App\Http\Requests\StoreQuestionRequest;
+use App\Http\Requests\UpdateExamRequest;
 use App\Models\Exam;
 use App\Models\Question;
+use App\Models\Subject;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 
 class ExamController extends Controller
 {
@@ -32,38 +30,25 @@ class ExamController extends Controller
      */
     public function create(): View
     {
-        return view('exam.create');
+        $subjects = Subject::all();
+        $questions = Question::all();
+        return view('exam.create', compact('subjects', 'questions'));
     }
 
     /**
      * Store a newly created exam in storage.
      *
-     * @param StoreQuestionRequest $request
-     * @param Exam $exam
+     * @param StoreExamRequest $request
      * @return RedirectResponse
      */
-    public function store(StoreQuestionRequest $request, Exam $exam): RedirectResponse
+    public function store(StoreExamRequest $request): RedirectResponse
     {
-        $validatedData = $request->validated();
+        $exam = Exam::create($request->validated());
 
-        $question = Question::create([
-            'subject_id' => $validatedData['subject_id'],
-            'question' => $validatedData['question'],
-        ]);
+        $exam->questions()->attach($request->questions);
 
-        foreach ($validatedData['answers'] as $key => $answer) {
-            $isCorrect = $key == $validatedData['is_correct'] ? 1 : 0;
-            $question->answers()->create([
-                'answer' => $answer,
-                'is_correct' => $isCorrect,
-            ]);
-        }
-
-        $exam->questions()->attach($question->id);
-
-        return redirect()->route('questions.index')->with('success', 'Question added successfully.');
+        return redirect()->route('exams.index')->with('success', 'Exam created successfully.');
     }
-
     /**
      * Show the form for editing the specified exam.
      *
@@ -78,13 +63,15 @@ class ExamController extends Controller
     /**
      * Update the specified exam in storage.
      *
-     * @param StoreExamRequest $request
+     * @param UpdateExamRequest $request
      * @param Exam $exam
      * @return RedirectResponse
      */
-    public function update(StoreExamRequest $request, Exam $exam): RedirectResponse
+    public function update(UpdateExamRequest $request, Exam $exam): RedirectResponse
     {
         $validatedData = $request->validated();
+        $exam->update($validatedData);
+
         return redirect()->route('exams.index')->with('success', 'Exam updated successfully.');
     }
 
@@ -132,7 +119,6 @@ class ExamController extends Controller
      */
     public function trashed(): View
     {
-        $exams = Exam::onlyTrashed()->paginate(10);
-        return view('exam.trashed', compact('exams'));
-    }
-}
+        $trashedExams = Exam::onlyTrashed()->paginate(10);
+        return view('exam.trashed', ['trashedExams' => $trashedExams]);
+    }}

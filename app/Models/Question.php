@@ -24,7 +24,6 @@ class Question extends Model
     {
         return $this->hasMany(Answer::class);
     }
-
     public function exams():BelongsToMany
     {
         return $this->belongsToMany(Question::class);

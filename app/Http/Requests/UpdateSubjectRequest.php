@@ -22,8 +22,8 @@ class UpdateSubjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['string'],
-            'semester_id' => ['integer', 'exists:semesters,id'],
+            'name' => 'string',
+            'semester_id' => 'integer|exists:semesters,id',
         ];
     }
 }

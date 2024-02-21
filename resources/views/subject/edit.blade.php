@@ -1,6 +1,6 @@
 @extends('master')
-
 @section('content')
+
     <h1>Edit Subject</h1>
 
     <form action="{{ route('subjects.update', $subject) }}" method="POST">

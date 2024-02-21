@@ -1,6 +1,12 @@
 @extends('master')
 @section('title', 'All Exams')
 @section('content')
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="breadcrumbs">
         <div class="breadcrumbs-inner">
             <div class="row m-0">
@@ -25,6 +31,7 @@
         <div class="card">
             <div class="card-header">
                 <strong class="card-title">Exams</strong>
+                <a href="{{ route('exams.trashed') }}" class="btn btn-secondary float-right">View Trashed Exams</a>
             </div>
             <div class="card-body">
                 <table class="table">
@@ -45,7 +52,13 @@
                             <td>{{$exam->date}}</td>
                             <td>{{$exam->subject->name}}</td>
                             <td>
-                                <a href="{{ route('exam.questions.create', ['exam' => $exam->id]) }}" class="btn btn-primary">Add Question</a>                            </td>
+                                <a href="{{ route('exams.edit', $exam) }}" class="btn btn-warning">Edit</a>
+                                <form action="{{ route('exams.destroy', $exam) }}" method="POST" style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

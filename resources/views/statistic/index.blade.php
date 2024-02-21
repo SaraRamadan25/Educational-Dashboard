@@ -1,5 +1,4 @@
 @extends('master')
-
 @section('content')
     <div class="container">
         <h1>Statistics</h1>

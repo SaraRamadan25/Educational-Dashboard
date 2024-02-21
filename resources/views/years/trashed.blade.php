@@ -1,6 +1,6 @@
 @extends('master')
-
 @section('content')
+
     <h1>Deleted Years</h1>
 
     <table class="table">

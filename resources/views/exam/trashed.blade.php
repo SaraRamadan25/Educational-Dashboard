@@ -11,7 +11,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($trashedExams as $year)
+        @foreach($trashedExams as $exam)
             <tr>
                 <td>{{ $exam->name }}</td>
                 <td>
@@ -26,7 +26,7 @@
     </table>
 
     <div class="d-flex justify-content-center">
-        {{ $trashedExams>links('pagination::bootstrap-4') }}
+        {{ $trashedExams->links('pagination::bootstrap-4') }}
     </div>
     <div class="d-flex justify-content-center">
         Page {{ $trashedExams->currentPage() }} of {{ $trashedExams->lastPage() }}

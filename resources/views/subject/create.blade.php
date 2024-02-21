@@ -1,7 +1,7 @@
 @extends('master')
-
 @section('content')
-    <h1>Add New Subject</h1>
+
+    <h1>Add a New Subject</h1>
 
     <form action="{{ route('subjects.store') }}" method="POST">
         @csrf

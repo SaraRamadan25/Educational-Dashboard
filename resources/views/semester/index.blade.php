@@ -8,8 +8,6 @@
         </div>
     @endif
 
-    <!-- ... -->
-
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
@@ -47,7 +45,6 @@
         </div>
     </div>
 
-    <!-- Pagination -->
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">

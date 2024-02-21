@@ -39,19 +39,13 @@ Route::get('questions/trashed', [QuestionController::class, 'trashed'])->name('q
 Route::post('questions/{question}/restore', [QuestionController::class, 'restore'])->name('questions.restore');
 Route::resource('questions', QuestionController::class);
 
-Route::post('/exams/{exam}/questions', [QuestionController::class, 'store'])->name('questions.store');
-Route::get('/exams/{exam}/questions/create', [QuestionController::class,'create'])->name('exam.questions.create');
 Route::get('exams/trashed', [ExamController::class, 'trashed'])->name('exams.trashed');
 Route::post('exams/{exam}/restore', [ExamController::class, 'restore'])->name('exams.restore');
 Route::resource('exams', ExamController::class);
+
 Route::get('statistics', [StatisticController::class,'index'])->name('statistics.index');
 
-/*Route::get('questions/{exam:exam_name}', [QuestionController::class,'index'])->name('questions.index');*/
-/*Route::get('questions/create/{subject:name}/{exam:exam_name}', [QuestionController::class,'create'])->name('questions.create');*/
-/*Route::get('/questions/create/{subject:name}', [QuestionController::class,'create'])->name('questions.create');
-Route::post('/questions', [QuestionController::class,'store'])->name('questions.store');*/
 
-/*Route::get('/exams/{exam}/questions/create', [QuestionController::class,'create'])->name('exam.questions.create');*/
 
 
 

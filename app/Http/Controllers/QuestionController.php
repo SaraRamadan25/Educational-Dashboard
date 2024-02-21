@@ -6,13 +6,10 @@ use App\Http\Requests\StoreQuestionRequest;
 use App\Http\Requests\UpdateQuestionsRequest;
 use App\Models\Exam;
 use App\Models\Question;
-use App\Models\Answer;
 use App\Models\Subject;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 
 
 class QuestionController extends Controller
@@ -68,7 +65,6 @@ class QuestionController extends Controller
             ]);
         }
 
-        $exam->questions()->attach($question->id);
 
         return redirect()->route('questions.index')->with('success', 'Question added successfully.');
     }

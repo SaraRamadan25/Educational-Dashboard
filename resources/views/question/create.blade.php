@@ -17,8 +17,7 @@
                         <button type="submit" class="btn btn-primary">Next</button>
                     </form>
                 @else
-                    <form action="{{ route('questions.store', ['exam' => $exam->id]) }}" method="POST">
-                        @csrf
+                    <form action="{{ route('questions.store', $exam->id) }}" method="POST">                        @csrf
                         <div class="form-group">
                             <label for="question">Question:</label>
                             <input type="text" name="question" id="question" class="form-control" placeholder="Enter your question here">

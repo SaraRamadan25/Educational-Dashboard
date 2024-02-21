@@ -25,7 +25,7 @@ class StoreQuestionRequest extends FormRequest
     {
         return [
             'subject_id' => 'required|exists:subjects,id',
-            'question' => 'required|string|max:255',
+            'question' => 'required|string',
             'answers' => 'required|array',
             'is_correct' => 'required|numeric',
         ];
