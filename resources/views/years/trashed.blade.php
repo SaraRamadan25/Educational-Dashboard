@@ -11,12 +11,13 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($trashedYears as $year)
+        @foreach($years as $year)
             <tr>
                 <td>{{ $year->name }}</td>
                 <td>
-                    <form action="{{ route('years.restore', $year) }}" method="POST">
+                    <form action="{{ route('years.destroy', $year) }}" method="POST">
                         @csrf
+                        @method('DELETE')
                         <button type="submit" class="btn btn-success">Restore</button>
                     </form>
                 </td>
@@ -26,9 +27,9 @@
     </table>
 
     <div class="d-flex justify-content-center">
-        {{ $trashedYears->links('pagination::bootstrap-4') }}
+        {{ $years->links('pagination::bootstrap-4') }}
     </div>
     <div class="d-flex justify-content-center">
-        Page {{ $trashedYears->currentPage() }} of {{ $trashedYears->lastPage() }}
+        Page {{ $years->currentPage() }} of {{ $years->lastPage() }}
     </div>
 @endsection

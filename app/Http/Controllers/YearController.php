@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreYearRequest;
 use App\Models\Year;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -14,25 +12,25 @@ class YearController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     * @param Request $request
      * @return View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $years = Year::paginate(10);
-        return view('years.index', compact('years'));
+        $trashed = $request->get('trashed') === 'true';
+        $years = $trashed ? Year::onlyTrashed()->paginate(10) : Year::paginate(10);
+        $view = $trashed ? 'years.trashed' : 'years.index';
+        return view($view, compact('years'));
     }
-
     /**
      * Show the form for creating a new resource.
-     *
+     * @param Year|null $year
      * @return View
      */
-    public function create(): View
+    public function form(Year $year = null): View
     {
-        return view('years.create');
+        return view('years.form', compact('year'));
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -51,10 +49,6 @@ class YearController extends Controller
      * @param Year $year
      * @return View
      */
-    public function edit(Year $year): View
-    {
-        return view('years.edit', compact('year'));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -77,30 +71,25 @@ class YearController extends Controller
      */
     public function destroy(Year $year): RedirectResponse
     {
-        $year->delete();
-        return redirect()->route('years.index')->with('success', 'Year deleted successfully');
+        if ($year->trashed()) {
+            $year->restore();
+            $message = 'Year restored successfully';
+        } else {
+            $year->delete();
+            $message = 'Year deleted successfully';
+        }
+
+        return redirect()->route('years.index')->with('success', $message);
     }
 
     /**
-     * Restore the specified resource from storage.
+     * Display the specified resource.
      *
      * @param Year $year
-     * @return RedirectResponse
-     */
-    public function restore(Year $year): RedirectResponse
-    {
-        $year->restore();
-        return redirect()->route('years.index')->with('success', 'Year restored successfully');
-    }
-
-    /**
-     * Display a listing of the trashed resources.
-     *
      * @return View
      */
-    public function trashed(): View
+    public function show(Year $year): View
     {
-        $trashedYears = Year::onlyTrashed()->paginate(10);
-        return view('years.trashed', compact('trashedYears'));
+        return view('years.show', compact('year'));
     }
 }

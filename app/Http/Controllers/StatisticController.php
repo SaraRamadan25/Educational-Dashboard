@@ -5,10 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Semester;
 use App\Models\Subject;
 use App\Models\Year;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 class StatisticController extends Controller
 {
     /**
@@ -31,6 +28,6 @@ class StatisticController extends Controller
             ->selectRaw('count(subjects.id) as subjects_count')
             ->get();
 
-        return view('statistic.index', compact('yearCount', 'semesterCount','semesters_in_year','subjects','years_with_subjects', 'years_with_exams'));
+        return view('statistics.index', compact('yearCount', 'semesterCount','semesters_in_year','subjects','years_with_subjects', 'years_with_exams'));
     }
 }

@@ -1,5 +1,5 @@
 @extends('master')
-@section('title', 'Academic Semesters')
+@section('title', 'All Questions')
 
 @section('content')
     @if(session('success'))
@@ -11,26 +11,28 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">Academic Semesters</strong>
+                <strong class="card-title">Questions</strong>
+                <a href="{{ route('questions.trashed') }}" class="btn btn-secondary float-right">View Trash</a>
             </div>
             <div class="card-body">
                 <table class="table">
                     <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Semester Name</th>
-                        <th scope="col">Semester's Year</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Question</th>
+                        <th scope="col">Subject Name</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($semesters as $semester)
+                    @foreach($questions as $question)
                         <tr>
-                            <td>{{ $semester->name }}</td>
-                            <td>{{ $semester->year->name }}</td>
+                            <th scope="row">{{$question->id}}</th>
+                            <td>{{$question->question}}</td>
+                            <td>{{ $question->subject ? $question->subject->name : 'N/A' }}</td>
                             <td>
-                                <a href="{{ route('semesters.edit', $semester) }}" class="btn btn-primary">Edit</a>
-
-                                <form action="{{ route('semesters.destroy', $semester) }}" method="POST" style="display: inline-block;">
+                                <a href="{{ route('questions.form', $question) }}" class="btn btn-primary">Edit</a>
+                                <form action="{{ route('questions.destroy', $question) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -40,7 +42,6 @@
                     @endforeach
                     </tbody>
                 </table>
-                <a href="{{ route('semesters.trashed') }}" class="btn btn-secondary">View Trashed Semesters</a>
             </div>
         </div>
     </div>
@@ -49,10 +50,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-center">
-                    {{ $semesters->links('pagination::bootstrap-4') }}
+                    {{ $questions->links('pagination::bootstrap-4') }}
                 </div>
                 <div class="d-flex justify-content-center">
-                    Page {{ $semesters->currentPage() }} of {{ $semesters->lastPage() }}
+                    Page {{ $questions->currentPage() }} of {{ $questions->lastPage() }}
                 </div>
             </div>
         </div>

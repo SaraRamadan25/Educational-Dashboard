@@ -1,20 +1,21 @@
 @extends('master')
+
 @section('content')
-    <h1>Deleted Questions</h1>
+    <h1>Deleted Exams</h1>
 
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">Question</th>
+            <th scope="col">Exam Name</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
-        @foreach($trashedQuestions as $question)
+        @foreach($exams as $exam)
             <tr>
-                <td>{{ $question->question }}</td>
+                <td>{{ $exam->name }}</td>
                 <td>
-                    <form action="{{ route('questions.restore', $question) }}" method="POST">
+                    <form action="{{ route('exams.restore', $exam) }}" method="POST">
                         @csrf
                         <button type="submit" class="btn btn-success">Restore</button>
                     </form>
@@ -25,9 +26,9 @@
     </table>
 
     <div class="d-flex justify-content-center">
-        {{ $trashedQuestions->links('pagination::bootstrap-4') }}
+        {{ $exams->links('pagination::bootstrap-4') }}
     </div>
     <div class="d-flex justify-content-center">
-        Page {{ $trashedQuestions->currentPage() }} of {{ $trashedQuestions->lastPage() }}
+        Page {{ $exams->currentPage() }} of {{ $exams->lastPage() }}
     </div>
 @endsection

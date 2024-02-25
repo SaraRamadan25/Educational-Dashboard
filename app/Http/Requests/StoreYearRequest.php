@@ -25,4 +25,17 @@ class StoreYearRequest extends FormRequest
             'name' => 'required|string',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            '*.required' => ':attribute is required',
+            '*.string' => ':attribute must be a string',
+        ];
+    }
 }

@@ -3,41 +3,52 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSubjectRequest;
-use App\Http\Requests\UpdateSubjectRequest;
 use App\Models\Semester;
 use App\Models\Subject;
+use App\Models\Year;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 
 class SubjectController extends Controller
 {
     /**
      * Display a listing of the subjects.
-     *
+     * @param Request $request
      * @return View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $subjects = Subject::with('semester')->paginate(10);
-        return view('subject.index',compact('subjects'));
+        $trashed = $request->get('trashed') === 'true';
+        $years = Year::cursor();
+        $subjects = Subject::paginate(10);
+        $year = $request->get('year');
+
+        if ($year) {
+            $semesters = Semester::with('subjects')->where('year_id', $year);
+        } else {
+            $semesters = Semester::with('subjects');
+        }
+
+        $semesters = $trashed ? $semesters->onlyTrashed()->paginate(10) : $semesters->paginate(10);
+        $view = $trashed ? 'subjects.trashed' : 'subjects.index';
+        $selectedYearId = $request->get('year');
+        return view($view, compact('semesters', 'years', 'selectedYearId', 'subjects'));
     }
 
     /**
-     * Show the form for creating a new subject.
-     *
+     * Show the form for creating a new subjects.
+     * @param Subject|null $subject
      * @return View
      */
-    public function create(): View
+    public function form(Subject $subject = null): View
     {
-        $semesters = Semester::all();
-        return view('subject.create', compact('semesters'));
+        $semesters = Semester::cursor();
+        return view('subjects.form', compact('subject', 'semesters'));
     }
 
     /**
-     * Store a newly created subject in storage.
+     * Store a newly created subjects in storage.
      *
      * @param StoreSubjectRequest $request
      * @return RedirectResponse
@@ -48,63 +59,38 @@ class SubjectController extends Controller
         return redirect()->route('subjects.index')->with('success', 'Subject added successfully.');
     }
 
-    /**
-     * Show the form for editing the specified subject.
-     *
-     * @param Subject $subject
-     * @return View
-     */
-    public function edit(Subject $subject): View
-    {
-        $semesters = Semester::all();
-        return view('subject.edit', compact('subject', 'semesters'));
-    }
 
     /**
-     * Update the specified subject in storage.
+     * Update the specified subjects in storage.
      *
-     * @param UpdateSubjectRequest $request
+     * @param StoreSubjectRequest $request
      * @param Subject $subject
      * @return RedirectResponse
      */
-    public function update(UpdateSubjectRequest $request, Subject $subject): RedirectResponse
+    public function update(StoreSubjectRequest $request, Subject $subject): RedirectResponse
     {
         $subject->update($request->validated());
         return redirect()->route('subjects.index')->with('success', 'Subject updated successfully');
     }
 
     /**
-     * Remove the specified subject from storage.
+     * Remove the specified subjects from storage.
      *
      * @param Subject $subject
      * @return RedirectResponse
      */
     public function destroy(Subject $subject): RedirectResponse
     {
-        $subject->delete();
-        return redirect()->route('subjects.index')->with('success', 'Subject deleted successfully');
+        if ($subject->trashed()) {
+            $subject->restore();
+            $message = 'Subject restored successfully';
+        } else {
+            $subject->delete();
+            $message = 'Subject deleted successfully';
+        }
+
+        return redirect()->route('subjects.index')->with('success', $message);
     }
 
-    /**
-     * Display a listing of the trashed subjects.
-     *
-     * @return View
-     */
-    public function trashed(): View
-    {
-        $trashedSubjects = Subject::onlyTrashed()->paginate(10);
-        return view('subject.trashed', compact('trashedSubjects'));
-    }
 
-    /**
-     * Restore the specified subject from storage.
-     *
-     * @param Subject $subject
-     * @return RedirectResponse
-     */
-    public function restore(Subject $subject): RedirectResponse
-    {
-        $subject->restore();
-        return redirect()->route('subjects.index')->with('success', 'Subject restored successfully');
-    }
 }

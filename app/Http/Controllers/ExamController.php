@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreExamRequest;
-use App\Http\Requests\UpdateExamRequest;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\Subject;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
@@ -17,108 +17,93 @@ class ExamController extends Controller
      *
      * @return View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $exams= Exam::paginate(10);
-        return view('exam.index',compact('exams'));
+        $trashed = $request->get('trashed') === 'true';
+        $exams = $trashed ? Exam::onlyTrashed()->paginate(10) : Exam::paginate(10);
+        $view = $trashed ? 'exams.trashed' : 'exams.index';
+        return view($view, compact('exams'));
     }
 
     /**
-     * Show the form for creating a new exam.
-     *
+     * Show the form for creating a new exams.
+     * @param Exam|null $exam
      * @return View
      */
-    public function create(): View
+
+    public function form(Exam $exam = null): View
     {
-        $subjects = Subject::all();
-        $questions = Question::all();
-        return view('exam.create', compact('subjects', 'questions'));
+        $subjects = Subject::cursor();
+        $questions = Question::paginate(10);
+        return view('exams.form', compact('exam', 'subjects', 'questions'));
     }
 
     /**
-     * Store a newly created exam in storage.
+     * Store a newly created exams in storage.
      *
-     * @param StoreExamRequest $request
+     * @param  StoreExamRequest  $request
      * @return RedirectResponse
      */
     public function store(StoreExamRequest $request): RedirectResponse
     {
         $exam = Exam::create($request->validated());
 
-        $exam->questions()->attach($request->questions);
+        $exam->questions()->sync($request->selected_questions);
 
         return redirect()->route('exams.index')->with('success', 'Exam created successfully.');
     }
     /**
-     * Show the form for editing the specified exam.
+     * Show the form for editing the specified exams.
      *
-     * @param Exam $exam
+     * @param  Exam  $exams
      * @return View
      */
-    public function edit(Exam $exam): View
-    {
-        return view('exam.edit', compact('exam'));
-    }
 
     /**
-     * Update the specified exam in storage.
+     * Update the specified exams in storage.
      *
-     * @param UpdateExamRequest $request
-     * @param Exam $exam
+     * @param  StoreExamRequest  $request
+     * @param  Exam  $exam
      * @return RedirectResponse
      */
-    public function update(UpdateExamRequest $request, Exam $exam): RedirectResponse
+    public function update(StoreExamRequest $request, Exam $exam): RedirectResponse
     {
-        $validatedData = $request->validated();
-        $exam->update($validatedData);
+        $exam->update($request->validated());
+
+        $exam->questions()->sync($request->selected_questions);
 
         return redirect()->route('exams.index')->with('success', 'Exam updated successfully.');
     }
-
     /**
-     * Remove the specified exam from storage.
+     * Remove the specified exams from storage.
      *
-     * @param Exam $exam
+     * @param  Exam  $exam
      * @return RedirectResponse
      */
     public function destroy(Exam $exam): RedirectResponse
     {
-        $exam->delete();
-        return redirect()->route('exams.index')->with('success', 'Exam deleted successfully.');
+        if ($exam->trashed()) {
+            $exam->restore();
+            $message = 'Exam restored successfully';
+        } else {
+            $exam->delete();
+            $message = 'Exam deleted successfully';
+        }
+
+        return redirect()->route('exams.index')->with('success', $message);
     }
 
     /**
-     * Display the specified exam.
+     * Display the specified exams.
      *
-     * @param Exam $exam
+     * @param  Exam  $exam
      * @return View
      */
     public function show(Exam $exam): View
     {
         $exam = $exam->load('questions');
 
-        return view('exam.show', compact('exam'));
+        return view('exams.show', compact('exam'));
     }
 
-    /**
-     * Restore the specified exam from storage.
-     *
-     * @param Exam $exam
-     * @return RedirectResponse
-     */
-    public function restore(Exam $exam): RedirectResponse
-    {
-        $exam->restore();
-        return redirect()->route('exams.index')->with('success', 'Exam restored successfully.');
-    }
-
-    /**
-     * Display a listing of the trashed exams.
-     *
-     * @return View
-     */
-    public function trashed(): View
-    {
-        $trashedExams = Exam::onlyTrashed()->paginate(10);
-        return view('exam.trashed', ['trashedExams' => $trashedExams]);
-    }}
+}

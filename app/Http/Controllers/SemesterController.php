@@ -7,31 +7,33 @@ use App\Models\Semester;
 use App\Models\Year;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class SemesterController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     * @param Request $request
      * @return View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $semesters = Semester::with('year')->paginate(10);
-        return view('semester.index',compact('semesters'));
+        $trashed = $request->get('trashed') === 'true';
+        $semesters = $trashed ? Semester::onlyTrashed()->paginate(10) : Semester::paginate(10);
+        $view = $trashed ? 'semesters.trashed' : 'semesters.index';
+        return view($view, compact('semesters'));
     }
 
     /**
      * Show the form for creating a new resource.
-     *
+     * @param Semester|null $semester
      * @return View
      */
-    public function create(): View
+    public function form(Semester $semester = null): View
     {
-        $years = Year::all();
-        return view('semester.create',compact('years'));
+        $years = Year::cursor();
+        return view('semesters.form', compact('semester', 'years'));
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -42,18 +44,6 @@ class SemesterController extends Controller
     {
         Semester::create($request->validated());
         return redirect()->route('semesters.index')->with('success', 'Semester added successfully.');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Semester $semester
-     * @return View
-     */
-    public function edit(Semester $semester): View
-    {
-        $years = Year::all();
-        return view('semester.edit', compact('semester','years'));
     }
 
     /**
@@ -77,30 +67,15 @@ class SemesterController extends Controller
      */
     public function destroy(Semester $semester): RedirectResponse
     {
-        $semester->delete();
-        return redirect()->route('semesters.index')->with('success', 'Semester deleted successfully');
+        if ($semester->trashed()) {
+            $semester->restore();
+            $message = 'Semester restored successfully';
+        } else {
+            $semester->delete();
+            $message = 'Semester deleted successfully';
+        }
+
+        return redirect()->route('semesters.index')->with('success', $message);
     }
 
-    /**
-     * Display a listing of the trashed resources.
-     *
-     * @return View
-     */
-    public function trashed(): View
-    {
-        $trashedSemesters = Semester::onlyTrashed()->paginate(10);
-        return view('semester.trashed', compact('trashedSemesters'));
-    }
-
-    /**
-     * Restore the specified resource from storage.
-     *
-     * @param Semester $semester
-     * @return RedirectResponse
-     */
-    public function restore(Semester $semester): RedirectResponse
-    {
-        $semester->restore();
-        return redirect()->route('semesters.index')->with('success', 'Semester restored successfully');
-    }
 }

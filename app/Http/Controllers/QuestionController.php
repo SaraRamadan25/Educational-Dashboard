@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQuestionRequest;
-use App\Http\Requests\UpdateQuestionsRequest;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\Subject;
@@ -16,33 +15,32 @@ class QuestionController extends Controller
 {
     /**
      * Display a listing of the questions.
-     *
-     * @return View
-     */
-    public function index(): View
-    {
-        $questions = Question::with('subject')->paginate(10);
-        return view('question.index', compact('questions'));
-    }
-
-    /**
-     * Show the form for creating a new question.
-     *
      * @param Request $request
-     * @param Subject $subject
-     * @param Exam $exam
      * @return View
      */
-    public function create(Request $request,Subject $subject, Exam $exam): View
+    public function index(Request $request): View
     {
-        $subjects = Subject::all();
-        $numAnswers = $request->input('num_answers');
+        $trashed = $request->get('trashed') === 'true';
+        $questions = $trashed ? Question::onlyTrashed()->paginate(10) : Question::paginate(10);
 
-        return view('question.create', compact('subject', 'subjects','numAnswers','exam'));
+        $view = $trashed ? 'questions.trashed' : 'questions.index';
+        return view($view, compact('questions'));
     }
 
     /**
-     * Store a newly created question in storage.
+     * Show the form for creating a new questions.
+     * @param Question|null $question
+     * @return View
+     */
+
+    public function form(Question $question = null): View
+    {
+        $subjects = Subject::cursor();
+        return view('questions.form', compact('question', 'subjects'));
+    }
+
+    /**
+     * Store a newly created questions in storage.
      *
      * @param StoreQuestionRequest $request
      * @param Exam $exam
@@ -65,73 +63,51 @@ class QuestionController extends Controller
             ]);
         }
 
-
         return redirect()->route('questions.index')->with('success', 'Question added successfully.');
     }
-
     /**
-     * Show the form for editing the specified question.
+     * Show the form for editing the specified questions.
      *
-     * @param Question $question
+     * @param Question $questions
      * @param Request $request
      * @return View
      */
-    public function edit(Question $question, Request $request): View
-    {
-        $subjects = Subject::all();
-        return view('question.edit', compact('question', 'subjects'));
-    }
 
     /**
-     * Update the specified question in storage.
+     * Update the specified questions in storage.
      *
-     * @param UpdateQuestionsRequest $request
+     * @param StoreQuestionRequest $request
      * @param Question $question
      * @return RedirectResponse
      */
-    public function update(UpdateQuestionsRequest $request, Question $question): RedirectResponse
+    public function update(StoreQuestionRequest $request, Question $question): RedirectResponse
     {
         $validatedData = $request->validated();
         $question->update([
             'subject_id' => $validatedData['subject_id'],
-            'question' => $validatedData['question'],
+            'questions' => $validatedData['questions'],
         ]);
 
         return redirect()->route('questions.index')->with('success', 'Question updated successfully');
     }
 
     /**
-     * Remove the specified question from storage.
+     * Remove the specified questions from storage.
      *
      * @param Question $question
      * @return RedirectResponse
      */
     public function destroy(Question $question): RedirectResponse
     {
-        $question->delete();
-        return redirect()->route('questions.index')->with('success', 'Question deleted successfully');
+        if ($question->trashed()) {
+            $question->restore();
+            $message = 'Question restored successfully';
+        } else {
+            $question->delete();
+            $message = 'Question deleted successfully';
+        }
+
+        return redirect()->route('questions.index')->with('success', $message);
     }
 
-    /**
-     * Display a listing of the trashed questions.
-     *
-     * @return View
-     */
-    public function trashed(): View
-    {
-        $trashedQuestions = Question::onlyTrashed()->paginate(10);
-        return view('question.trashed', compact('trashedQuestions'));
-    }
-
-    /**
-     * Restore the specified question from storage.
-     *
-     * @param Question $question
-     * @return RedirectResponse
-     */
-    public function restore(Question $question): RedirectResponse
-    {
-        $question->restore();
-        return redirect()->route('questions.index')->with('success', 'Question restored successfully');
-    }
 }

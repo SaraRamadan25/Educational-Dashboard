@@ -27,4 +27,19 @@ class StoreExamRequest extends FormRequest
             'subject_id' => 'required|exists:subjects,id',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            '*.required' => ':attribute is required',
+            '*.string' => ':attribute must be a string',
+            '*.date' => ':attribute must be a valid date',
+            '*.exists' => 'The selected :attribute is invalid',
+        ];
+    }
 }

@@ -10,7 +10,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($trashedSubjects as $subject)
+        @foreach($subjects as $subject)
             <tr>
                 <td>{{ $subject->name }}</td>
                 <td>
@@ -24,10 +24,5 @@
         </tbody>
     </table>
 
-    <div class="d-flex justify-content-center">
-        {{ $trashedSubjects->links('pagination::bootstrap-4') }}
-    </div>
-    <div class="d-flex justify-content-center">
-        Page {{ $trashedSubjects->currentPage() }} of {{ $trashedSubjects->lastPage() }}
-    </div>
+
 @endsection

@@ -19,7 +19,7 @@ class QuestionFactory extends Factory
     public function definition(): array
     {
         return [
-            'question' => $this->faker->text(),
+            'questions' => $this->faker->text(),
             'subject_id' => Subject::factory(),
         ];
     }

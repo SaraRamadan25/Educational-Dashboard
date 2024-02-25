@@ -50,9 +50,9 @@
                             <th scope="row">{{$exam->id}}</th>
                             <td>{{$exam->name}}</td>
                             <td>{{$exam->date}}</td>
-                            <td>{{$exam->subject->name}}</td>
+                            <td>{{ $exam->subject ? $exam->subject->name : 'N/A' }}</td>
                             <td>
-                                <a href="{{ route('exams.edit', $exam) }}" class="btn btn-warning">Edit</a>
+                                <a href="{{ route('exams.form', $exam) }}" class="btn btn-warning">Edit</a>
                                 <form action="{{ route('exams.destroy', $exam) }}" method="POST" style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
@@ -66,5 +66,18 @@
             </div>
         </div>
     </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    {{ $exams->links('pagination::bootstrap-4') }}
+                </div>
+                <div class="d-flex justify-content-center">
+                    Page {{ $exams->currentPage() }} of {{ $exams->lastPage() }}
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 @endsection

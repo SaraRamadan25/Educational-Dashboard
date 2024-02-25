@@ -20,7 +20,7 @@ class Subject extends Model
         return $this->hasMany(Exam::class);
     }
 
-    public function semester(): BelongsTo
+    public function semesters(): BelongsTo
     {
         return $this->belongsTo(Semester::class);
     }

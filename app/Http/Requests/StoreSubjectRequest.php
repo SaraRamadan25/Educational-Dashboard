@@ -26,4 +26,20 @@ class StoreSubjectRequest extends FormRequest
             'semester_id' => 'required|integer|exists:semesters,id',
             ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+
+    public function messages(): array
+    {
+        return [
+            '*.required' => ':attribute is required',
+            '*.string' => ':attribute must be a string',
+            '*.integer' => ':attribute must be an integer',
+            '*.exists' => 'The selected :attribute is invalid',
+        ];
+    }
 }

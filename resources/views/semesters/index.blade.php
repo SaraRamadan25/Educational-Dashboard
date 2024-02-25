@@ -1,5 +1,5 @@
 @extends('master')
-@section('title', 'Academic Years')
+@section('title', 'Academic Semesters')
 
 @section('content')
 
@@ -32,23 +32,25 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <strong class="card-title">Academic Years</strong>
+                <strong class="card-title">Academic Semesters</strong>
             </div>
             <div class="card-body">
                 <table class="table">
                     <thead class="thead-dark">
                     <tr>
+                        <th scope="col">Semester Name</th>
                         <th scope="col">Year Name</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($years as $year)
+                    @foreach($semesters as $semester)
                         <tr>
-                            <td>{{ $year->name }}</td>
+                            <td>{{ $semester->name }}</td>
+                            <td>{{ $semester->year ? $semester->year->name : 'N/A' }}</td>
                             <td>
-                                <a href="{{ route('years.form', $year) }}" class="btn btn-primary">Edit</a>
+                                <a href="{{ route('semesters.form', $semester) }}" class="btn btn-primary">Edit</a>
 
-                                <form action="{{ route('years.destroy', $year) }}" method="POST" style="display: inline-block;">
+                                <form action="{{ route('semesters.destroy', $semester) }}" method="POST" style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -57,7 +59,7 @@
                         </tr>
                     @endforeach
                     <tr>
-                        <a href="{{ route('years.trashed') }}" class="btn btn-secondary">View Trashed Years</a>
+                        <a href="{{ route('semesters.trashed') }}" class="btn btn-secondary">View Trashed Semesters</a>                    </tbody>
                 </table>
             </div>
         </div>
@@ -66,10 +68,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-center">
-                    {{ $years->links('pagination::bootstrap-4') }}
+                    {{ $semesters->links('pagination::bootstrap-4') }}
                 </div>
                 <div class="d-flex justify-content-center">
-                    Page {{ $years->currentPage() }} of {{ $years->lastPage() }}
+                    Page {{ $semesters->currentPage() }} of {{ $semesters->lastPage() }}
                 </div>
             </div>
         </div>

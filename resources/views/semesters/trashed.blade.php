@@ -1,5 +1,6 @@
 @extends('master')
 @section('content')
+
     <h1>Deleted Semesters</h1>
 
     <table class="table">
@@ -10,24 +11,26 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($trashedSemesters as $semester)
+        @foreach($semesters as $semester)
             <tr>
                 <td>{{ $semester->name }}</td>
                 <td>
-                    <form action="{{ route('semesters.restore', $semester) }}" method="POST">
+                    <form action="{{ route('semesters.destroy', $semester) }}" method="POST">
                         @csrf
+                        @method('DELETE')
                         <button type="submit" class="btn btn-success">Restore</button>
                     </form>
                 </td>
             </tr>
         @endforeach
+
         </tbody>
     </table>
 
     <div class="d-flex justify-content-center">
-        {{ $trashedSemesters->links('pagination::bootstrap-4') }}
+        {{ $semesters->links('pagination::bootstrap-4') }}
     </div>
     <div class="d-flex justify-content-center">
-        Page {{ $trashedSemesters->currentPage() }} of {{ $trashedSemesters->lastPage() }}
+        Page {{ $semesters->currentPage() }} of {{ $semesters->lastPage() }}
     </div>
 @endsection
