@@ -2,11 +2,8 @@
 @section('title', 'All Questions')
 
 @section('content')
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    <div id="success-message" class="alert alert-success" style="display: none;"></div>
+
 
     <div class="col-lg-12">
         <div class="card">
@@ -59,3 +56,17 @@
         </div>
     </div>
 @endsection
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        let successMessage = sessionStorage.getItem('success');
+
+        if (successMessage) {
+            $('#success-message').text(successMessage).show();
+            sessionStorage.removeItem('success');
+        } else {
+            $('#success-message').hide();
+        }
+    });
+</script>

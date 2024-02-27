@@ -43,8 +43,9 @@ class SubjectController extends Controller
      */
     public function form(Subject $subject = null): View
     {
+        $years = Year::cursor();
         $semesters = Semester::cursor();
-        return view('subjects.form', compact('subject', 'semesters'));
+        return view('subjects.form', compact('subject', 'semesters', 'years'));
     }
 
     /**

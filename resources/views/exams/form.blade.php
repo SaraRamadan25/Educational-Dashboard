@@ -22,9 +22,6 @@
         <div class="form-group">
             <label for="name">Exam Name</label>
             <input type="text" name="name" id="name" class="form-control" value="{{ old('name', isset($exam) ? $exam->name : '') }}">
-            @error('name')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
         </div>
 
         <div class="form-group">
@@ -35,17 +32,11 @@
                     <option value="{{ $subject->id }}" {{ isset($exam) && $exam->subject_id == $subject->id ? 'selected' : '' }}>{{ $subject->name }}</option>
                 @endforeach
             </select>
-            @error('subject_id')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
         </div>
 
         <div class="form-group">
             <label for="date">Exam date</label>
             <input type="date" name="date" id="date" class="form-control" value="{{ old('date', isset($exam) ? $exam->date : '') }}">
-            @error('date')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
         </div>
 
         <div class="form-group">

@@ -24,6 +24,7 @@ class StoreSubjectRequest extends FormRequest
         return [
             'name' => 'required|string',
             'semester_id' => 'required|integer|exists:semesters,id',
+            'year_id' => 'required|integer|exists:years,id',
             ];
     }
 
@@ -33,13 +34,11 @@ class StoreSubjectRequest extends FormRequest
      * @return array<string, string>
      */
 
-    public function messages(): array
+    public function attributes(): array
     {
         return [
-            '*.required' => ':attribute is required',
-            '*.string' => ':attribute must be a string',
-            '*.integer' => ':attribute must be an integer',
-            '*.exists' => 'The selected :attribute is invalid',
+            'name' => __('subjects.name'),
+            'semester_id' => __('semesters.id'),
+            'year_id' => __('years.id'),
         ];
-    }
-}
+    }}

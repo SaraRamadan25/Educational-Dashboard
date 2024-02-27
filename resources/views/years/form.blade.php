@@ -22,9 +22,7 @@
         <div class="form-group">
             <label for="name">Year Name</label>
             <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $year ? $year->name : '') }}">
-            @error('name')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+
         </div>
 
         <button type="submit" class="btn btn-primary">{{ $year ? 'Update' : 'Create' }}</button>

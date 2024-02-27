@@ -1,6 +1,7 @@
 @extends('master')
 @section('title', isset($question) ? 'Edit Question' : 'Add Question')
 
+<div id="error-messages" class="alert alert-danger" style="display: none;"></div>
 @section('content')
     <div class="col-lg-12">
         <div class="card">
@@ -12,6 +13,16 @@
                     @csrf
                     @if(isset($question))
                         @method('PUT')
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     @endif
                     <div class="form-group">
                         <label for="question">Question:</label>
@@ -47,22 +58,22 @@
         </div>
     </div>
 @endsection
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script>
     $(document).ready(function() {
         let answerCount = {{ isset($question) ? count($question->answers) : 0 }};
 
         $('#add-answer').click(function() {
             let newAnswerField = `
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="is_correct" id="is_correct${answerCount}" value="${answerCount}">
-                <label class="form-check-label" for="is_correct${answerCount}">
-                    Correct Answer
-                </label>
-            </div>
-            <input type="text" class="form-control" name="answers[]" id="answer${answerCount}" placeholder="Answer ${answerCount + 1}">
-        `;
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="is_correct" id="is_correct${answerCount}" value="${answerCount}">
+            <label class="form-check-label" for="is_correct${answerCount}">
+                Correct Answer
+            </label>
+        </div>
+        <input type="text" class="form-control" name="answers[]" id="answer${answerCount}" placeholder="Answer ${answerCount + 1}">
+    `;
 
             $('#answers-container').append(newAnswerField);
             answerCount++;
@@ -76,13 +87,23 @@
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
                 success: function(data) {
-
                     window.location.href = "{{ route('questions.index') }}";
+                    sessionStorage.setItem('success', 'Question added successfully.');
                 },
-                error: function(error) {
-                    console.log(error);
+                error: function(jqXHR, textStatus, errorThrown) {
+                    let response = JSON.parse(jqXHR.responseText);
+
+                    $('#error-messages').empty().hide();
+
+                    $.each(response.errors, function(key, value) {
+                        $('#error-messages').append('<p>' + value + '</p>');
+                    });
+
+                    $('#error-messages').show();
                 }
             });
         });
     });
 </script>
+
+

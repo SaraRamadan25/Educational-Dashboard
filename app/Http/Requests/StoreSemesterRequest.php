@@ -22,7 +22,7 @@ class StoreSemesterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'year_id' => 'required',
+            'year_id' => 'required|exists:years,id',
             'name' => 'required',
         ];
     }
@@ -32,10 +32,11 @@ class StoreSemesterRequest extends FormRequest
      *
      * @return array<string, string>
      */
-    public function messages(): array
+    public function attributes(): array
     {
         return [
-            '*.required' => ':attribute is required',
-        ];
+            'year_id' => __('years.id'),
+            'name' => __('semesters.name'),
+            ];
     }
 }

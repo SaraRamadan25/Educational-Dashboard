@@ -33,13 +33,11 @@ class StoreExamRequest extends FormRequest
      *
      * @return array<string, string>
      */
-    public function messages(): array
+    public function attributes(): array
     {
         return [
-            '*.required' => ':attribute is required',
-            '*.string' => ':attribute must be a string',
-            '*.date' => ':attribute must be a valid date',
-            '*.exists' => 'The selected :attribute is invalid',
+            'name' => __('exams.name'),
+            'date' => __('exams.date'),
+            'subject_id' => __('subjects.id'),
         ];
-    }
-}
+    }}

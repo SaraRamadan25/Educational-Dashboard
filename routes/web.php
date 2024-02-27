@@ -23,6 +23,8 @@ Route::get('/', function () {
     return view('master');
 })->name('home');
 
+Route::get('get-semesters/{year}', [SemesterController::class, 'getSemestersByYear']);
+
 Route::get('years/index', [YearController::class, 'index'])->name('years.index');
 Route::get('years/index/trashed', function () {
     return redirect()->route('years.index', ['trashed' => 'true']);

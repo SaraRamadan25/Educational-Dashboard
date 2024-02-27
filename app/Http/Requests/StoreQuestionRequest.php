@@ -36,14 +36,12 @@ class StoreQuestionRequest extends FormRequest
      *
      * @return array<string, string>
      */
-    public function messages(): array
+    public function attributes(): array
     {
         return [
-            '*.required' => ':attribute is required',
-            '*.string' => ':attribute must be a string',
-            '*.array' => ':attribute must be an array',
-            '*.numeric' => ':attribute must be a numeric value',
-            '*.exists' => 'The selected :attribute is invalid',
+            'subject_id' => 'subject',
+            'question' => 'question text',
+            'answers' => 'answer options',
+            'is_correct' => 'correct answer',
         ];
-    }
-}
+    }}

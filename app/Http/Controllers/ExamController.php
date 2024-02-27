@@ -48,7 +48,7 @@ class ExamController extends Controller
     {
         $exam = Exam::create($request->validated());
 
-        $exam->questions()->sync($request->selected_questions);
+        $exam->questions()->attach($request->selected_questions);
 
         return redirect()->route('exams.index')->with('success', 'Exam created successfully.');
     }
@@ -70,7 +70,7 @@ class ExamController extends Controller
     {
         $exam->update($request->validated());
 
-        $exam->questions()->sync($request->selected_questions);
+        $exam->questions()->attach($request->selected_questions);
 
         return redirect()->route('exams.index')->with('success', 'Exam updated successfully.');
     }

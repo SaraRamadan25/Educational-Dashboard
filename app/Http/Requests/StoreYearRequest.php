@@ -31,11 +31,9 @@ class StoreYearRequest extends FormRequest
      *
      * @return array<string, string>
      */
-    public function messages(): array
+    public function attributes(): array
     {
         return [
-            '*.required' => ':attribute is required',
-            '*.string' => ':attribute must be a string',
+            'name' => __('years.name'),
         ];
-    }
-}
+    }}

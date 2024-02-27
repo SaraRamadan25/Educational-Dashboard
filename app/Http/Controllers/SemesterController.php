@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSemesterRequest;
 use App\Models\Semester;
 use App\Models\Year;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -77,5 +78,9 @@ class SemesterController extends Controller
 
         return redirect()->route('semesters.index')->with('success', $message);
     }
-
+    public function getSemestersByYear(Year $year): JsonResponse
+    {
+        $semesters = $year->semesters()->pluck('name', 'id');
+        return response()->json($semesters);
+    }
 }

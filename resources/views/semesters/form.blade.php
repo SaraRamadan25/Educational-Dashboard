@@ -26,17 +26,12 @@
                     <option value="{{ $year->id }}" {{ $semester && $semester->year_id == $year->id ? 'selected' : '' }}>{{ $year->name }}</option>
                 @endforeach
             </select>
-            @error('year_id')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
         </div>
 
         <div class="form-group">
             <label for="name">Semester Name</label>
             <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $semester ? $semester->name : '') }}">
-            @error('name')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+
         </div>
 
         <button type="submit" class="btn btn-primary">{{ $semester ? 'Update' : 'Submit' }}</button>
