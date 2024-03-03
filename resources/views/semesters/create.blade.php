@@ -1,7 +1,7 @@
 @extends('master')
 @section('content')
 
-    <h1>{{ $semester ? 'Edit Semester' : 'Create New Semester' }}</h1>
+    <h1>Create New Semester</h1>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -13,27 +13,24 @@
         </div>
     @endif
 
-    <form action="{{ $semester ? route('semesters.update', $semester) : route('semesters.store') }}" method="POST">
+    <form action="{{ route('semesters.store') }}" method="POST">
         @csrf
-        @if($semester)
-            @method('PUT')
-        @endif
 
         <div class="form-group">
             <label for="year">Year</label>
             <select name="year_id" id="year" class="form-control">
                 @foreach($years as $year)
-                    <option value="{{ $year->id }}" {{ $semester && $semester->year_id == $year->id ? 'selected' : '' }}>{{ $year->name }}</option>
+                    <option value="{{ $year->id }}">{{ $year->name }}</option>
                 @endforeach
             </select>
         </div>
 
         <div class="form-group">
             <label for="name">Semester Name</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $semester ? $semester->name : '') }}">
+            <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}">
 
         </div>
 
-        <button type="submit" class="btn btn-primary">{{ $semester ? 'Update' : 'Submit' }}</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 @endsection

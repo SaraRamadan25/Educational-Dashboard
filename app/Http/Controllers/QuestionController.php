@@ -20,11 +20,13 @@ class QuestionController extends Controller
      */
     public function index(Request $request): View
     {
-        $trashed = $request->get('trashed') === 'true';
-        $questions = $trashed ? Question::onlyTrashed()->paginate(10) : Question::paginate(10);
+        if ($request->has('trashed')) {
+            $questions = Question::onlyTrashed()->paginate(10);
+            return view('questions.trashed', compact('questions'));
+        }
 
-        $view = $trashed ? 'questions.trashed' : 'questions.index';
-        return view($view, compact('questions'));
+        $questions = Question::paginate(10);
+        return view('questions.index', compact('questions'));
     }
 
     /**
@@ -36,7 +38,7 @@ class QuestionController extends Controller
     public function form(Question $question = null): View
     {
         $subjects = Subject::cursor();
-        return view('questions.form', compact('question', 'subjects'));
+        return $question ? view('questions.edit', compact('question','subjects')) : view('questions.create', compact('subjects'));
     }
 
     /**
@@ -85,7 +87,7 @@ class QuestionController extends Controller
         $validatedData = $request->validated();
         $question->update([
             'subject_id' => $validatedData['subject_id'],
-            'questions' => $validatedData['questions'],
+            'question' => $validatedData['question'],
         ]);
 
         return redirect()->route('questions.index')->with('success', 'Question updated successfully');

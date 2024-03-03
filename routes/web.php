@@ -25,45 +25,35 @@ Route::get('/', function () {
 
 Route::get('get-semesters/{year}', [SemesterController::class, 'getSemestersByYear']);
 
-Route::get('years/index', [YearController::class, 'index'])->name('years.index');
-Route::get('years/index/trashed', function () {
-    return redirect()->route('years.index', ['trashed' => 'true']);
-})->name('years.trashed');
-Route::get('years/form/{year?}', [YearController::class, 'form'])->name('years.form');
+Route::get('years/create', [YearController::class, 'form'])->name('years.create');
+Route::get('years/{year}/edit', [YearController::class, 'form'])->name('years.edit');
+Route::get('years/trashed', [YearController::class, 'index'])->name('years.trashed');
 Route::post('years/{year}/restore', [YearController::class, 'restore'])->name('years.restore');
-Route::resource('years', YearController::class);
+Route::resource('years', YearController::class)->except(['create', 'edit']);
 
-Route::get('semesters/index', [SemesterController::class, 'index'])->name('semesters.index');
-Route::get('semesters/index/trashed', function () {
-    return redirect()->route('semesters.index', ['trashed' => 'true']);
-})->name('semesters.trashed');
-Route::get('semesters/form/{semester?}', [SemesterController::class, 'form'])->name('semesters.form');
+Route::get('semesters/create', [SemesterController::class, 'form'])->name('semesters.create');
+Route::get('semesters/{semester}/edit', [SemesterController::class, 'form'])->name('semesters.edit');
+Route::get('semesters/trashed', [SemesterController::class, 'index'])->name('semesters.trashed');
 Route::post('semesters/{semester}/restore', [SemesterController::class, 'restore'])->name('semesters.restore');
-Route::resource('semesters', SemesterController::class);
+Route::resource('semesters', SemesterController::class)->except(['create', 'edit']);
 
-Route::get('subjects/index', [SubjectController::class, 'index'])->name('subjects.index');
-Route::get('subjects/index/trashed', function () {
-    return redirect()->route('subjects.index', ['trashed' => 'true']);
-})->name('subjects.trashed');
-Route::get('subjects/form/{subject?}', [SubjectController::class, 'form'])->name('subjects.form');
+Route::get('subjects/create', [SubjectController::class, 'form'])->name('subjects.create');
+Route::get('subjects/{subject}/edit', [SubjectController::class, 'form'])->name('subjects.edit');
+Route::get('subjects/trashed', [SubjectController::class, 'index'])->name('subjects.trashed');
 Route::post('subjects/{subject}/restore', [SubjectController::class, 'destroy'])->name('subjects.restore');
-Route::resource('subjects', SubjectController::class);
+Route::resource('subjects', SubjectController::class)->except(['create', 'edit']);
 
-Route::get('questions/index', [QuestionController::class, 'index'])->name('questions.index');
-Route::get('questions/index/trashed', function () {
-    return redirect()->route('questions.index', ['trashed' => 'true']);
-})->name('questions.trashed');
-Route::get('questions/form/{question?}', [QuestionController::class, 'form'])->name('questions.form');
+Route::get('questions/create', [QuestionController::class, 'form'])->name('questions.create');
+Route::get('questions/{question}/edit', [QuestionController::class, 'form'])->name('questions.edit');
+Route::get('questions/trashed', [QuestionController::class, 'index'])->name('questions.trashed');
 Route::post('questions/{question}/restore', [QuestionController::class, 'destroy'])->name('questions.restore');
-Route::resource('questions', QuestionController::class);
+Route::resource('questions', QuestionController::class)->except(['create', 'edit']);
 
-Route::get('exams/index', [ExamController::class, 'index'])->name('exams.index');
-Route::get('exams/index/trashed', function () {
-    return redirect()->route('exams.index', ['trashed' => 'true']);
-})->name('exams.trashed');
-Route::get('exams/form/{exam?}', [ExamController::class, 'form'])->name('exams.form');
+Route::get('exams/create', [ExamController::class, 'form'])->name('exams.create');
+Route::get('exams/{exam}/edit', [ExamController::class, 'form'])->name('exams.edit');
+Route::get('exams/trashed', [ExamController::class, 'index'])->name('exams.trashed');
 Route::post('exams/{exam}/restore', [ExamController::class, 'destroy'])->name('exams.restore');
-Route::resource('exams', ExamController::class);
+Route::resource('exams', ExamController::class)->except(['create', 'edit']);
 
 Route::get('statistics', [StatisticController::class,'index'])->name('statistics.index');
 

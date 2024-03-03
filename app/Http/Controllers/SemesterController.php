@@ -19,10 +19,13 @@ class SemesterController extends Controller
      */
     public function index(Request $request): View
     {
-        $trashed = $request->get('trashed') === 'true';
-        $semesters = $trashed ? Semester::onlyTrashed()->paginate(10) : Semester::paginate(10);
-        $view = $trashed ? 'semesters.trashed' : 'semesters.index';
-        return view($view, compact('semesters'));
+        if ($request->has('trashed')) {
+            $semesters = Year::onlyTrashed()->paginate(10);
+            return view('semesters.trashed', compact('semesters'));
+        }
+
+        $semesters = Semester::paginate(10);
+        return view('semesters.index', compact('semesters'));
     }
 
     /**
@@ -33,7 +36,7 @@ class SemesterController extends Controller
     public function form(Semester $semester = null): View
     {
         $years = Year::cursor();
-        return view('semesters.form', compact('semester', 'years'));
+        return $semester ? view('semesters.edit', compact('semester')) : view('semesters.create', compact('years'));
     }
     /**
      * Store a newly created resource in storage.

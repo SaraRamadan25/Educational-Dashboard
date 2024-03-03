@@ -9,7 +9,7 @@
         <div class="card">
             <div class="card-header">
                 <strong class="card-title">Questions</strong>
-                <a href="{{ route('questions.trashed') }}" class="btn btn-secondary float-right">View Trash</a>
+                <a href="{{ route('questions.trashed' , ['trashed' => true])}}" class="btn btn-secondary float-right">View Trash</a>
             </div>
             <div class="card-body">
                 <table class="table">
@@ -28,7 +28,7 @@
                             <td>{{$question->question}}</td>
                             <td>{{ $question->subject ? $question->subject->name : 'N/A' }}</td>
                             <td>
-                                <a href="{{ route('questions.form', $question) }}" class="btn btn-primary">Edit</a>
+                                <a href="{{ route('questions.edit', $question) }}" class="btn btn-primary">Edit</a>
                                 <form action="{{ route('questions.destroy', $question) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')

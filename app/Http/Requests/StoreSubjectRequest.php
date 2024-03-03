@@ -24,7 +24,6 @@ class StoreSubjectRequest extends FormRequest
         return [
             'name' => 'required|string',
             'semester_id' => 'required|integer|exists:semesters,id',
-            'year_id' => 'required|integer|exists:years,id',
             ];
     }
 
@@ -39,6 +38,5 @@ class StoreSubjectRequest extends FormRequest
         return [
             'name' => __('subjects.name'),
             'semester_id' => __('semesters.id'),
-            'year_id' => __('years.id'),
         ];
     }}

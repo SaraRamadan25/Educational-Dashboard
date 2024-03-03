@@ -46,7 +46,7 @@
                         <tr>
                             <td>{{ $year->name }}</td>
                             <td>
-                                <a href="{{ route('years.form', $year) }}" class="btn btn-primary">Edit</a>
+                                <a href="{{ route('years.edit', $year) }}" class="btn btn-primary">Edit</a>
 
                                 <form action="{{ route('years.destroy', $year) }}" method="POST" style="display: inline-block;">
                                     @csrf
@@ -57,7 +57,7 @@
                         </tr>
                     @endforeach
                     <tr>
-                        <a href="{{ route('years.trashed') }}" class="btn btn-secondary">View Trashed Years</a>
+                        <a href="{{ route('years.trashed', ['trashed' => true]) }}" class="btn btn-secondary">View Trashed Years</a>
                 </table>
             </div>
         </div>

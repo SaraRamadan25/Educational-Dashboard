@@ -48,7 +48,7 @@
                             <td>{{ $semester->name }}</td>
                             <td>{{ $semester->year ? $semester->year->name : 'N/A' }}</td>
                             <td>
-                                <a href="{{ route('semesters.form', $semester) }}" class="btn btn-primary">Edit</a>
+                                <a href="{{ route('semesters.edit', $semester) }}" class="btn btn-primary">Edit</a>
 
                                 <form action="{{ route('semesters.destroy', $semester) }}" method="POST" style="display: inline-block;">
                                     @csrf
@@ -59,7 +59,7 @@
                         </tr>
                     @endforeach
                     <tr>
-                        <a href="{{ route('semesters.trashed') }}" class="btn btn-secondary">View Trashed Semesters</a>                    </tbody>
+                        <a href="{{ route('semesters.trashed', ['trashed' => true]) }}" class="btn btn-secondary">View Trashed Semesters</a>                    </tbody>
                 </table>
             </div>
         </div>

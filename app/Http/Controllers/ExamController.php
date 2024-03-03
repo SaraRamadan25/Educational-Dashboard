@@ -19,10 +19,13 @@ class ExamController extends Controller
      */
     public function index(Request $request): View
     {
-        $trashed = $request->get('trashed') === 'true';
-        $exams = $trashed ? Exam::onlyTrashed()->paginate(10) : Exam::paginate(10);
-        $view = $trashed ? 'exams.trashed' : 'exams.index';
-        return view($view, compact('exams'));
+        if ($request->has('trashed')) {
+            $exams = Exam::onlyTrashed()->paginate(10);
+            return view('exams.trashed', compact('exams'));
+        }
+
+        $exams = Exam::paginate(10);
+        return view('exams.index', compact('exams'));
     }
 
     /**
@@ -35,7 +38,7 @@ class ExamController extends Controller
     {
         $subjects = Subject::cursor();
         $questions = Question::paginate(10);
-        return view('exams.form', compact('exam', 'subjects', 'questions'));
+        return $exam ? view('exams.edit', compact('subjects', 'exam', 'questions')) : view('exams.create', compact('subjects', 'questions'));
     }
 
     /**

@@ -31,7 +31,7 @@
         <div class="card">
             <div class="card-header">
                 <strong class="card-title">Exams</strong>
-                <a href="{{ route('exams.trashed') }}" class="btn btn-secondary float-right">View Trashed Exams</a>
+                <a href="{{ route('exams.trashed' , ['trashed' => true]) }}" class="btn btn-secondary float-right">View Trashed Exams</a>
             </div>
             <div class="card-body">
                 <table class="table">
@@ -52,7 +52,7 @@
                             <td>{{$exam->date}}</td>
                             <td>{{ $exam->subject ? $exam->subject->name : 'N/A' }}</td>
                             <td>
-                                <a href="{{ route('exams.form', $exam) }}" class="btn btn-warning">Edit</a>
+                                <a href="{{ route('exams.edit', $exam) }}" class="btn btn-warning">Edit</a>
                                 <form action="{{ route('exams.destroy', $exam) }}" method="POST" style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')

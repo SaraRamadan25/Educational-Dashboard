@@ -17,10 +17,13 @@ class YearController extends Controller
      */
     public function index(Request $request): View
     {
-        $trashed = $request->get('trashed') === 'true';
-        $years = $trashed ? Year::onlyTrashed()->paginate(10) : Year::paginate(10);
-        $view = $trashed ? 'years.trashed' : 'years.index';
-        return view($view, compact('years'));
+        if ($request->has('trashed')) {
+            $years = Year::onlyTrashed()->paginate(10);
+            return view('years.trashed', compact('years'));
+        }
+
+        $years = Year::paginate(10);
+        return view('years.index', compact('years'));
     }
     /**
      * Show the form for creating a new resource.
@@ -29,7 +32,7 @@ class YearController extends Controller
      */
     public function form(Year $year = null): View
     {
-        return view('years.form', compact('year'));
+        return $year ? view('years.edit', compact('year')) : view('years.create');
     }
     /**
      * Store a newly created resource in storage.

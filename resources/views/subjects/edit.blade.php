@@ -1,7 +1,7 @@
 @extends('master')
 @section('content')
 
-    <h1>{{ $subject ? 'Edit Subject' : 'Create Subject' }}</h1>
+    <h1>Edit Subject</h1>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -13,15 +13,13 @@
         </div>
     @endif
 
-    <form action="{{ $subject ? route('subjects.update', $subject) : route('subjects.store') }}" method="POST">
+    <form action="{{ route('subjects.update', $subject) }}" method="POST">
         @csrf
-        @if($subject)
-            @method('PUT')
-        @endif
+        @method('PUT')
 
         <div class="form-group">
             <label for="name">Subject Name</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $subject ? $subject->name : '') }}">
+            <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $subject->name) }}">
 
         </div>
 
@@ -29,7 +27,7 @@
             <label for="year">Year</label>
             <select name="year_id" id="year" class="form-control">
                 @foreach($years as $year)
-                    <option value="{{ $year->id }}" {{ $subject && $subject->year && $subject->year->id == $year->id ? 'selected' : '' }}>{{ $year->name }}</option>
+                    <option value="{{ $year->id }}" {{ ($subject->year->id ?? '') == $year->id ? 'selected' : '' }}>{{ $year->name }}</option>
                 @endforeach
             </select>
             @error('year_id')
@@ -41,7 +39,7 @@
             <label for="semester">Semester</label>
             <select name="semester_id" id="semester" class="form-control">
                 @foreach($semesters as $semester)
-                    <option value="{{ $semester->id }}" {{ $subject && $subject->semester && $subject->semester->id == $semester->id ? 'selected' : '' }}>{{ $semester->name }}</option>
+                    <option value="{{ $semester->id }}" {{ ($subject->semester->id ?? '') == $semester->id ? 'selected' : '' }}>{{ $semester->name }}</option>
                 @endforeach
             </select>
             @error('semester_id')
@@ -49,7 +47,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">{{ $subject ? 'Update' : 'Create' }}</button>
+        <button type="submit" class="btn btn-primary">Update</button>
     </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

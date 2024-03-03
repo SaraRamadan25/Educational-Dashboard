@@ -19,8 +19,8 @@ class SubjectController extends Controller
      */
     public function index(Request $request): View
     {
-        $trashed = $request->get('trashed') === 'true';
         $years = Year::cursor();
+        $trashed = $request->has('trashed');
         $subjects = Subject::paginate(10);
         $year = $request->get('year');
 
@@ -45,9 +45,8 @@ class SubjectController extends Controller
     {
         $years = Year::cursor();
         $semesters = Semester::cursor();
-        return view('subjects.form', compact('subject', 'semesters', 'years'));
+        return $subject ? view('subjects.edit', compact('subject', 'years', 'semesters')) : view('subjects.create', compact('years', 'semesters'));
     }
-
     /**
      * Store a newly created subjects in storage.
      *

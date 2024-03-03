@@ -21,7 +21,7 @@
                                 @endforeach
                             </select>
                         </form>
-                        <a href="{{ route('subjects.trashed') }}" class="btn btn-secondary">View Trashed Subjects</a>
+                        <a href="{{ route('subjects.trashed' , ['trashed' => true]) }}" class="btn btn-secondary">View Trashed Subjects</a>
                     @endif
                 </div>
             </div>
@@ -59,7 +59,7 @@
                             <td>{{$semester->name}}</td>
                             <td>{{$subject->name}}</td>
                             <td>
-                                <a href="{{ route('subjects.form', $subject->id) }}" class="btn btn-primary">Edit</a>
+                                <a href="{{ route('subjects.edit', $subject->id) }}" class="btn btn-primary">Edit</a>
                                 <form action="{{ route('subjects.destroy', $subject->id) }}" method="POST" style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
